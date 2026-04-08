@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createSession } from "@/lib/auth";
+import { createToken } from "@/lib/auth";
 import { readStore, writeStore } from "@/lib/storage";
 
 export async function POST(request: Request) {
@@ -24,7 +24,16 @@ export async function POST(request: Request) {
     await writeStore("users.json", users);
   }
 
-  await createSession(username);
+  const token = await createToken(username);
 
-  return NextResponse.json({ success: true, username });
+  const response = NextResponse.json({ success: true, username });
+  response.cookies.set("session", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 30,
+    path: "/",
+  });
+
+  return response;
 }
