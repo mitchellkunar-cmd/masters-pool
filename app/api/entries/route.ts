@@ -30,9 +30,9 @@ export async function POST(request: Request) {
   // Check deadline: 7:00 AM ET on Thursday April 10, 2026 (Masters Round 1)
   const now = new Date();
   const eastern = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
-  const deadline = new Date("2026-04-10T07:00:00");
+  const deadline = new Date("2026-04-09T07:00:00");
   if (eastern >= deadline) {
-    return NextResponse.json({ error: "Entries are closed. The deadline was 7:00 AM ET on April 10." }, { status: 403 });
+    return NextResponse.json({ error: "Entries are closed. The deadline was 7:00 AM ET on April 9." }, { status: 403 });
   }
 
   const entries = (await readEntries()) as { username: string }[];
