@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Username and password required" }, { status: 400 });
   }
 
-  if (password !== process.env.POOL_PASSWORD) {
+  if (password.trim() !== (process.env.POOL_PASSWORD || "").trim()) {
     return NextResponse.json({ error: "Invalid pool password" }, { status: 401 });
   }
 
