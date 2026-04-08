@@ -71,13 +71,13 @@ function LeaderboardContent() {
               countsToward: false,
             });
           } else {
-            // Golfer not found in tournament data — treat as 320 (4x80)
+            // Golfer not found in tournament data yet
             allPicks.push({
               tier: i,
               name: pickName,
-              totalStrokes: 320,
-              displayScore: "N/A",
-              didNotFinish: true,
+              totalStrokes: 0,
+              displayScore: "-",
+              didNotFinish: false,
               countsToward: false,
             });
           }
@@ -161,7 +161,7 @@ function LeaderboardContent() {
                   <div className="text-xs text-gray-400">{entry.name}</div>
                 </td>
                 <td className="p-3 text-center font-mono font-bold text-lg text-gray-900">
-                  {entry.teamScore}
+                  {entry.teamScore === 0 ? "-" : entry.teamScore}
                 </td>
                 {entry.golferPicks.map((gp) => (
                   <td key={gp.tier} className="p-3">

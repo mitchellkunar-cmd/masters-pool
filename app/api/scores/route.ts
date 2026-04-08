@@ -40,10 +40,20 @@ export async function GET() {
         const isDQ = statusDesc.toLowerCase().includes("dq") || statusDesc.toLowerCase().includes("disqualif");
         const didNotFinish = isCut || isWD || isDQ;
 
-        // Calculate total strokes: actual rounds played + 80 for each missing round
+        // Calculate total strokes
         const roundsPlayed = rounds.filter((r: number) => r > 0);
-        const totalStrokes = roundsPlayed.reduce((sum: number, r: number) => sum + r, 0) +
-          (4 - roundsPlayed.length) * 80;
+        let totalStrokes: number;
+        if (roundsPlayed.length === 0) {
+          // Tournament hasn't started for this golfer
+          totalStrokes = 0;
+        } else if (didNotFinish) {
+          // Cut/WD/DQ: actual strokes + 80 per missing round
+          totalStrokes = roundsPlayed.reduce((sum: number, r: number) => sum + r, 0) +
+            (4 - roundsPlayed.length) * 80;
+        } else {
+          // Active or finished: just sum actual strokes
+          totalStrokes = roundsPlayed.reduce((sum: number, r: number) => sum + r, 0);
+        }
 
         return {
           name: c.athlete?.displayName,
