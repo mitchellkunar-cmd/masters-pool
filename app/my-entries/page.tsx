@@ -64,7 +64,7 @@ function MyEntriesContent({ username }: { username: string }) {
         <div key={entry.id} className="bg-white rounded-xl shadow-lg overflow-hidden">
           <div className="bg-[#004d35] px-5 py-3">
             <h2 className="text-lg font-bold text-[#FFD700]">{entry.teamName}</h2>
-            <p className="text-green-200 text-sm">{entry.name} &bull; Submitted {new Date(entry.submittedAt).toLocaleDateString()}</p>
+            <p className="text-green-200 text-sm">{entry.name} &bull; Submitted {entry.submittedAt} ET</p>
           </div>
           <div className="p-5 space-y-2">
             {tiers.map((t) => (

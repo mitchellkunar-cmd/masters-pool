@@ -27,17 +27,37 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Missing tiebreaker" }, { status: 400 });
   }
 
+  // Check deadline: 7:00 AM ET on Thursday April 10, 2026 (Masters Round 1)
+  const now = new Date();
+  const eastern = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
+  const deadline = new Date("2026-04-10T07:00:00");
+  if (eastern >= deadline) {
+    return NextResponse.json({ error: "Entries are closed. The deadline was 7:00 AM ET on April 10." }, { status: 403 });
+  }
+
   const entries = (await readEntries()) as { username: string }[];
 
   if (entries.some((e) => e.username?.toLowerCase() === username.toLowerCase())) {
     return NextResponse.json({ error: "You have already submitted an entry" }, { status: 409 });
   }
 
+  // Timestamp in Eastern Time
+  const etTimestamp = now.toLocaleString("en-US", {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
+
   const newEntry = {
     id: Date.now().toString(),
     username,
     ...entry,
-    submittedAt: new Date().toISOString(),
+    submittedAt: etTimestamp,
   };
 
   entries.push(newEntry);
