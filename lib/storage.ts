@@ -1,32 +1,19 @@
-import { put, head, list } from "@vercel/blob";
+import { put, list as blobList } from "@vercel/blob";
 
-const USE_BLOB = process.env.BLOB_READ_WRITE_TOKEN ? true : false;
+export async function readStore(name: string): Promise<unknown[]> {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    // Local dev fallback
+    const fs = await import("fs");
+    const path = await import("path");
+    const p = path.join(process.cwd(), "data", name);
+    const dir = path.dirname(p);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    if (!fs.existsSync(p)) return [];
+    return JSON.parse(fs.readFileSync(p, "utf-8"));
+  }
 
-// --- Local file fallback for dev ---
-import fs from "fs";
-import path from "path";
-
-function localPath(name: string) {
-  const dir = path.join(process.cwd(), "data");
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  return path.join(dir, name);
-}
-
-function readLocal(name: string): unknown[] {
-  const p = localPath(name);
-  if (!fs.existsSync(p)) return [];
-  return JSON.parse(fs.readFileSync(p, "utf-8"));
-}
-
-function writeLocal(name: string, data: unknown[]) {
-  fs.writeFileSync(localPath(name), JSON.stringify(data, null, 2));
-}
-
-// --- Vercel Blob ---
-async function readBlob(name: string): Promise<unknown[]> {
   try {
-    // Check if blob exists by listing with prefix
-    const { blobs } = await list({ prefix: name });
+    const { blobs } = await blobList({ prefix: name });
     if (blobs.length === 0) return [];
     const res = await fetch(blobs[0].url);
     return await res.json();
@@ -35,20 +22,19 @@ async function readBlob(name: string): Promise<unknown[]> {
   }
 }
 
-async function writeBlob(name: string, data: unknown[]) {
+export async function writeStore(name: string, data: unknown[]) {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    const fs = await import("fs");
+    const path = await import("path");
+    const p = path.join(process.cwd(), "data", name);
+    const dir = path.dirname(p);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(p, JSON.stringify(data, null, 2));
+    return;
+  }
+
   await put(name, JSON.stringify(data), {
     access: "public",
     addRandomSuffix: false,
   });
-}
-
-// --- Public API ---
-export async function readStore(name: string): Promise<unknown[]> {
-  if (USE_BLOB) return readBlob(name);
-  return readLocal(name);
-}
-
-export async function writeStore(name: string, data: unknown[]) {
-  if (USE_BLOB) return writeBlob(name, data);
-  writeLocal(name, data);
 }
