@@ -91,8 +91,12 @@ function TournamentContent() {
               <tr key={i} className={`border-b border-gray-100 ${i % 2 === 0 ? "bg-white" : "bg-gray-50"}`}>
                 <td className="p-3 font-semibold text-gray-700">{g.position}</td>
                 <td className="p-3 font-semibold text-gray-900">{g.name}</td>
-                <td className="p-3 text-center font-mono font-semibold text-gray-900">{g.totalScore}</td>
-                <td className="p-3 text-center font-mono text-gray-600">{g.today}</td>
+                <td className={`p-3 text-center font-mono font-semibold ${
+                  g.totalScore.startsWith("-") ? "text-red-600" : g.totalScore === "E" ? "text-gray-900" : "text-gray-900"
+                }`}>{g.totalScore}</td>
+                <td className={`p-3 text-center font-mono ${
+                  g.today.startsWith("-") ? "text-red-600" : g.today === "E" ? "text-gray-600" : "text-gray-600"
+                }`}>{g.today}</td>
                 <td className="p-3 text-center text-gray-500">{g.thru || "-"}</td>
                 {g.rounds?.map((r, ri) => (
                   <td key={ri} className="p-3 text-center text-gray-500 hidden md:table-cell">{r || "-"}</td>
