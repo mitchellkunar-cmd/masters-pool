@@ -37,7 +37,8 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[#006747] flex items-center justify-center p-6">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
-        <div className="bg-[#004d35] border-b-4 border-[#FFD700] px-6 py-8 text-center">
+        <div className="bg-[#004d35] border-b-4 border-[#FFD700] px-6 py-6 text-center">
+          <img src="/masters-logo.svg" alt="The Masters" className="h-24 mx-auto mb-3" />
           <h1 className="text-3xl font-bold text-[#FFD700]">405 Masters Pool</h1>
           <p className="text-green-200 mt-1">2026 Masters Tournament</p>
         </div>

@@ -22,8 +22,9 @@ export default function Nav({ username }: { username: string }) {
   return (
     <div className="bg-[#004d35] border-b-4 border-[#FFD700]">
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-        <Link href="/picks" className="text-2xl font-bold text-[#FFD700] tracking-tight">
-          405 Masters Pool
+        <Link href="/picks" className="flex items-center gap-3">
+          <img src="/masters-logo.svg" alt="The Masters" className="h-10" />
+          <span className="text-2xl font-bold text-[#FFD700] tracking-tight">405 Masters Pool</span>
         </Link>
         <div className="flex items-center gap-4">
           <span className="text-green-200 text-sm hidden sm:inline">

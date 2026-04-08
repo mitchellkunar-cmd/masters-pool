@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none">
+  <!-- US Map outline (simplified) -->
+  <path d="M40 60 Q50 30 80 25 Q100 20 120 28 Q140 35 155 30 Q165 28 170 35 Q175 45 165 55 Q155 60 160 70 Q165 80 155 85 Q145 88 140 95 Q135 105 125 108 Q115 110 105 105 Q95 100 85 105 Q75 110 65 105 Q55 98 50 90 Q42 80 40 70 Z" fill="#FFD700" opacity="0.9"/>
+  <!-- Flag pole -->
+  <line x1="108" y1="25" x2="108" y2="105" stroke="#004d35" stroke-width="2"/>
+  <!-- Flag -->
+  <path d="M108 25 L130 35 L108 45 Z" fill="#004d35"/>
+  <!-- Text: THE MASTERS -->
+  <text x="100" y="130" text-anchor="middle" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#FFD700" letter-spacing="2">THE MASTERS</text>
+  <text x="100" y="148" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#FFD700" letter-spacing="1">TOURNAMENT</text>
+</svg>
