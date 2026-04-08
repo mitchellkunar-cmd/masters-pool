@@ -48,6 +48,11 @@ function PicksForm({ username }: { username: string }) {
       <p className="text-green-200 text-center text-sm mt-2">
         Logged in as <strong className="text-white">{username}</strong> &mdash; Pick one golfer per tier
       </p>
+      <div className="bg-[#004d35] rounded-lg px-4 py-3 text-green-200 text-sm space-y-1">
+        <p className="text-[#FFD700] font-semibold">How It Works</p>
+        <p>Pick 6 golfers (one per tier). Your best 4 of 6 scores count toward your team total.</p>
+        <p>Cut/WD/DQ golfers get 80 for each unfinished round. Lowest total strokes wins. Playoff holes do not count.</p>
+      </div>
 
       {tiers.map((tier) => (
         <div key={tier.tier} className="bg-white rounded-xl shadow-lg overflow-hidden">
