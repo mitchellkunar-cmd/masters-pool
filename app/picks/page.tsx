@@ -52,6 +52,8 @@ function PicksForm({ username }: { username: string }) {
         <p className="text-[#FFD700] font-semibold">How It Works</p>
         <p>Pick 6 golfers (one per tier). Your best 4 of 6 scores count toward your team total.</p>
         <p>Cut/WD/DQ golfers get 80 for each unfinished round. Lowest total strokes wins. Playoff holes do not count.</p>
+        <p className="text-[#FFD700] font-semibold mt-2">$20 Per Entry</p>
+        <p>Venmo: <strong className="text-white">mitch_kunar15</strong> &bull; Zelle: <strong className="text-white">7407558221</strong></p>
         <p className="text-[#FFD700] font-semibold mt-2">Deadline: 7:00 AM ET, Thursday April 9</p>
       </div>
 
