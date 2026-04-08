@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 
   const entry = await request.json();
 
-  if (!entry.teamName || !entry.name || !entry.email) {
+  if (!entry.teamName || !entry.name) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
   for (let i = 1; i <= 6; i++) {

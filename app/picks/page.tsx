@@ -11,8 +11,6 @@ function PicksForm({ username }: { username: string }) {
   const [tiebreaker, setTiebreaker] = useState("");
   const [teamName, setTeamName] = useState("");
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [agreed, setAgreed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -24,7 +22,6 @@ function PicksForm({ username }: { username: string }) {
     e.preventDefault();
     setError("");
 
-    if (!agreed) { setError("You must agree to the terms to submit."); return; }
     for (let i = 1; i <= 6; i++) {
       if (!picks[`tier${i}`]) { setError(`Please make a selection for Tier ${i}.`); return; }
     }
@@ -35,7 +32,7 @@ function PicksForm({ username }: { username: string }) {
       const res = await fetch("/api/entries", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ teamName, name, email, picks, tiebreaker }),
+        body: JSON.stringify({ teamName, name, picks, tiebreaker }),
       });
       const data = await res.json();
       if (!res.ok) { setError(data.error || "Something went wrong"); setSubmitting(false); return; }
@@ -119,15 +116,6 @@ function PicksForm({ username }: { username: string }) {
             <label className="block text-sm font-semibold text-gray-700 mb-1">Name</label>
             <input type="text" value={name} onChange={(e) => setName(e.target.value)} required
               className="w-full p-3 border-2 border-gray-200 rounded-lg text-gray-900 focus:border-[#006747] focus:outline-none" />
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Email</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
-              className="w-full p-3 border-2 border-gray-200 rounded-lg text-gray-900 focus:border-[#006747] focus:outline-none" />
-          </div>
-          <div className="flex items-start gap-3">
-            <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-1 w-4 h-4" />
-            <p className="text-sm text-gray-600">By joining this contest you agree to share your email with the Pool Administrator.</p>
           </div>
         </div>
       </div>
