@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
-import { readStore, writeStore } from "@/lib/storage";
+import { readEntries, writeEntries } from "@/lib/storage";
 
 export async function GET() {
-  const entries = await readStore("entries.json");
+  const entries = await readEntries();
   return NextResponse.json(entries);
 }
 
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Missing tiebreaker" }, { status: 400 });
   }
 
-  const entries = (await readStore("entries.json")) as { username: string }[];
+  const entries = (await readEntries()) as { username: string }[];
 
   if (entries.some((e) => e.username?.toLowerCase() === username.toLowerCase())) {
     return NextResponse.json({ error: "You have already submitted an entry" }, { status: 409 });
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
   };
 
   entries.push(newEntry);
-  await writeStore("entries.json", entries);
+  await writeEntries(entries);
 
   return NextResponse.json({ success: true, id: newEntry.id }, { status: 201 });
 }
