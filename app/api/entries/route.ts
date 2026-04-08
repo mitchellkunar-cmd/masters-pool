@@ -45,3 +45,23 @@ export async function POST(request: Request) {
 
   return NextResponse.json({ success: true, id: newEntry.id }, { status: 201 });
 }
+
+export async function DELETE(request: Request) {
+  const username = await getSession();
+  if (!username) {
+    return NextResponse.json({ error: "Not logged in" }, { status: 401 });
+  }
+
+  const { id } = await request.json();
+  const entries = (await readEntries()) as { id: string; username: string }[];
+
+  const entry = entries.find((e) => e.id === id);
+  if (!entry || entry.username.toLowerCase() !== username.toLowerCase()) {
+    return NextResponse.json({ error: "Entry not found" }, { status: 404 });
+  }
+
+  const updated = entries.filter((e) => e.id !== id);
+  await writeEntries(updated);
+
+  return NextResponse.json({ success: true });
+}

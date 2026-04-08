@@ -17,6 +17,21 @@ interface Entry {
 function MyEntriesContent({ username }: { username: string }) {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState<string | null>(null);
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this entry? You can re-submit new picks after.")) return;
+    setDeleting(id);
+    const res = await fetch("/api/entries", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    if (res.ok) {
+      setEntries((prev) => prev.filter((e) => e.id !== id));
+    }
+    setDeleting(null);
+  };
 
   useEffect(() => {
     fetch("/api/entries")
@@ -61,6 +76,15 @@ function MyEntriesContent({ username }: { username: string }) {
             <div className="flex justify-between text-sm pt-2 border-t">
               <span className="text-gray-500 font-semibold">Tiebreaker</span>
               <span className="text-gray-900 font-medium">{entry.tiebreaker}</span>
+            </div>
+            <div className="pt-3 border-t mt-3">
+              <button
+                onClick={() => handleDelete(entry.id)}
+                disabled={deleting === entry.id}
+                className="text-red-500 text-sm font-semibold hover:text-red-700 disabled:opacity-50"
+              >
+                {deleting === entry.id ? "Deleting..." : "Delete Entry"}
+              </button>
             </div>
           </div>
         </div>
