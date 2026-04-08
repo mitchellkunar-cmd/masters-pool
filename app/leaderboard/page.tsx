@@ -9,6 +9,7 @@ interface Entry {
   username: string;
   picks: Record<string, string>;
   tiebreaker: string;
+  submittedAt: string;
 }
 
 interface GolferScore {
@@ -159,6 +160,7 @@ function LeaderboardContent() {
                 <td className="p-3">
                   <div className="font-semibold text-gray-900">{entry.teamName}</div>
                   <div className="text-xs text-gray-400">{entry.name}</div>
+                  <div className="text-xs text-gray-300">{entry.submittedAt} ET</div>
                 </td>
                 <td className="p-3 text-center font-mono font-bold text-lg text-gray-900">
                   {entry.teamScore === 0 ? "-" : entry.teamScore}
