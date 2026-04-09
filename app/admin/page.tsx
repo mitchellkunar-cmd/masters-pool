@@ -17,6 +17,21 @@ function AdminContent({ username }: { username: string }) {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
+
+  const handleDelete = async (id: string, teamName: string) => {
+    if (!confirm(`Delete entry "${teamName}"? This cannot be undone.`)) return;
+    setDeleting(id);
+    const res = await fetch("/api/admin/delete", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    if (res.ok) {
+      setEntries((prev) => prev.filter((e) => e.id !== id));
+    }
+    setDeleting(null);
+  };
 
   useEffect(() => {
     // Only allow admin user
@@ -66,6 +81,7 @@ function AdminContent({ username }: { username: string }) {
                 <th className="p-3 text-left">T6</th>
                 <th className="p-3 text-center">TB</th>
                 <th className="p-3 text-left">Submitted</th>
+                <th className="p-3 text-center">Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -82,6 +98,15 @@ function AdminContent({ username }: { username: string }) {
                   <td className="p-3 text-gray-700 text-xs">{entry.picks?.tier6}</td>
                   <td className="p-3 text-center text-gray-700 font-mono">{entry.tiebreaker}</td>
                   <td className="p-3 text-gray-500 text-xs whitespace-nowrap">{entry.submittedAt} ET</td>
+                  <td className="p-3 text-center">
+                    <button
+                      onClick={() => handleDelete(entry.id, entry.teamName)}
+                      disabled={deleting === entry.id}
+                      className="text-red-500 text-xs font-semibold hover:text-red-700 disabled:opacity-50"
+                    >
+                      {deleting === entry.id ? "..." : "Delete"}
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
